@@ -1,0 +1,67 @@
+{
+  "name": "offline-chatgpt",
+  "version": "1.0.0",
+  "description": "An offline ChatGPT-like application with bundled Ollama and AI models",
+  "main": "main.js",
+  "build": {
+    "appId": "com.yourapp.offlinechatgpt",
+    "productName": "OfflineChatGPT",
+    "files": [
+      "**/*",
+      "!server.js"
+    ],
+    "asarUnpack": [
+      "ollama/**",
+      "models/**"
+    ],
+    "extraResources": [
+      {
+        "from": "server.js",
+        "to": "server.js"
+      },
+      {
+        "from": "ollama",
+        "to": "ollama"
+      },
+      {
+        "from": "models",
+        "to": "models",
+        "filter": ["**/*", "!Singleton*"]
+      }
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-${version}-Setup.${ext}"
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "server": "node server.js",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:all": "electron-builder --win --mac"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "electron": "^36.3.1",
+    "electron-builder": "^26.0.12"
+  }
+}

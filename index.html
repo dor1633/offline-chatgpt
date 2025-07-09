@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Offline ChatGPT</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    textarea, button { width: 100%; margin-top: 10px; }
+    #response { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Offline ChatGPT</h1>
+  <textarea id="prompt" rows="5" placeholder="Ask anything..."></textarea>
+  <button id="submit">Send</button>
+  <div id="response"></div>
+
+  <script>
+    document.getElementById('submit').onclick = async () => {
+      const prompt = document.getElementById('prompt').value
+      const responseEl = document.getElementById('response')
+      responseEl.textContent = 'Thinking...'
+
+      try {
+        const serverURL = window.api.getServerURL()
+        console.log(serverURL)
+        const res = await fetch(`${serverURL}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        })
+
+        const data = await res.json()
+        console.log(data)
+        responseEl.textContent = data.answer || data.error || 'No response.'
+      } catch (err) {
+        console.error("❌ Server error:", err)
+        responseEl.textContent = 'Error: ' + err.message
+      }
+    }
+  </script>
+</body>
+</html>
